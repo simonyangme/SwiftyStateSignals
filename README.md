@@ -1,4 +1,4 @@
-# SwiftyStateSignals
+# SwiftyStateSignals [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 
 SwiftyStateSignals is a simple finite state machine framework inspired by [StateSignals](https://github.com/erikprice/StateSignals) and built on [ReactiveCocoa](https://github.com/ReactiveCocoa/ReactiveCocoa) signals.
 
