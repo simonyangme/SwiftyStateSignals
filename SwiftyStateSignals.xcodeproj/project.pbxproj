@@ -102,7 +102,7 @@
 		89E8B60C1B116FAC00E6B892 /* SwiftyStateSignals.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftyStateSignals.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		89E8B6101B116FAC00E6B892 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		89E8B6111B116FAC00E6B892 /* SwiftyStateSignals.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwiftyStateSignals.h; sourceTree = "<group>"; };
-		89E8B6171B116FAC00E6B892 /* SwiftyStateSignalsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftyStateSignalsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		89E8B6171B116FAC00E6B892 /* SwiftyStateSignalsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = SwiftyStateSignalsTests.xctest; path = "SwiftyStateSignalsTests-iOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		89E8B61D1B116FAC00E6B892 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		89E8B6281B11BE2300E6B892 /* SwiftyStateSignals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyStateSignals.swift; sourceTree = "<group>"; };
 		89E8B6301B11C10A00E6B892 /* Box.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Box.framework; sourceTree = "<group>"; };
@@ -576,6 +576,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -624,6 +625,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -748,6 +750,7 @@
 				896A77A91B13DD2A0006BD4C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		896A77AA1B13DD2A0006BD4C /* Build configuration list for PBXNativeTarget "SwiftyStateSignalsTests-Mac" */ = {
 			isa = XCConfigurationList;
@@ -756,6 +759,7 @@
 				896A77AC1B13DD2A0006BD4C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		89E8B6061B116FAC00E6B892 /* Build configuration list for PBXProject "SwiftyStateSignals" */ = {
 			isa = XCConfigurationList;
