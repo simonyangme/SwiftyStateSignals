@@ -18,7 +18,7 @@ class TransitionDictionarySpec: QuickSpec {
             var transitionDictionary: TransitionDictionary<TestState, TestEvent>!
             
             beforeEach {
-                transitionDictionary = TransitionDictionary<TestState, TestEvent>()
+                transitionDictionary = TransitionDictionary()
                 transitionDictionary.mapEvent(.Event0, fromState: .A, toState: .B)
                 transitionDictionary.mapEvent(.Event1, fromState: .B, toState: .C)
                 transitionDictionary.mapEvent(.Event2, fromState: .C, toState: .D)
@@ -47,7 +47,7 @@ class TransitionDictionarySpec: QuickSpec {
             }
             
             it("should create new independent copies of transition dictionaries") {
-                let dictionaryCopy = TransitionDictionary<TestState, TestEvent>(fromTransitionDictionary:transitionDictionary)
+                let dictionaryCopy = TransitionDictionary(fromTransitionDictionary:transitionDictionary)
                 transitionDictionary.mapEvent(.Event3, fromState: .A, toState: .B)
                 dictionaryCopy.mapEvent(.Event3, fromState: .A, toState: .C)
                 

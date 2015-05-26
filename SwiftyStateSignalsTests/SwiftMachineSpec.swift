@@ -60,7 +60,7 @@ class SwiftMachineSepc: QuickSpec {
             var stateMachine: SignalMachine<TestState, TestEvent>!
     
             beforeEach {
-                transitionDictionary = TransitionDictionary<TestState, TestEvent>()
+                transitionDictionary = TransitionDictionary()
                 transitionDictionary.mapEvent(.Start, fromState: .Initial, toState: .A)
                 transitionDictionary.mapEvent(.Event0, fromState: .A, toState: .B)
                 transitionDictionary.mapEvent(.Event1, fromState: .B, toState: .C)
@@ -68,7 +68,7 @@ class SwiftMachineSepc: QuickSpec {
                 transitionDictionary.mapEvent(.Event3, fromState: .D, toState: .A)
                 transitionDictionary.mapEvent(.Event3, fromState: .B, toState: .D)
                 
-                stateMachine = SignalMachine<TestState, TestEvent>(transitionDictionary: transitionDictionary, withInitialState: .Initial)
+                stateMachine = SignalMachine(transitionDictionary: transitionDictionary, withInitialState: .Initial)
             }
             
             afterEach {
