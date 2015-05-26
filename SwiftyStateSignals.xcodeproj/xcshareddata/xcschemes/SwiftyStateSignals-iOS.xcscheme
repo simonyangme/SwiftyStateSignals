@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "89E8B60B1B116FAC00E6B892"
-               BuildableName = "SwiftyStateSignals-iOS.framework"
+               BuildableName = "SwiftyStateSignals.framework"
                BlueprintName = "SwiftyStateSignals-iOS"
                ReferencedContainer = "container:SwiftyStateSignals.xcodeproj">
             </BuildableReference>
@@ -57,7 +57,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "89E8B60B1B116FAC00E6B892"
-            BuildableName = "SwiftyStateSignals-iOS.framework"
+            BuildableName = "SwiftyStateSignals.framework"
             BlueprintName = "SwiftyStateSignals-iOS"
             ReferencedContainer = "container:SwiftyStateSignals.xcodeproj">
          </BuildableReference>
@@ -76,7 +76,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "89E8B60B1B116FAC00E6B892"
-            BuildableName = "SwiftyStateSignals-iOS.framework"
+            BuildableName = "SwiftyStateSignals.framework"
             BlueprintName = "SwiftyStateSignals-iOS"
             ReferencedContainer = "container:SwiftyStateSignals.xcodeproj">
          </BuildableReference>
@@ -94,7 +94,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "89E8B60B1B116FAC00E6B892"
-            BuildableName = "SwiftyStateSignals-iOS.framework"
+            BuildableName = "SwiftyStateSignals.framework"
             BlueprintName = "SwiftyStateSignals-iOS"
             ReferencedContainer = "container:SwiftyStateSignals.xcodeproj">
          </BuildableReference>
