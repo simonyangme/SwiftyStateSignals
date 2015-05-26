@@ -33,14 +33,14 @@ Then create a transition dictionary with the desired transitions and create the 
 We can observe for changes by subscribing to any of the signals that the state machine vends. For example:
 
     machine.allTransitions().observe(next: { transition in
-	    	NSLog("Observed an event")
-	    	// Do stuff here
-    	})
+        NSLog("Observed an event")
+        // Do stuff here
+    })
     	
     	machine.transitionFaults().observe(next: { transition in
-    		NSLog("Invalid event; no transition occurred")
-    		// Do other stuff here
-    	})
+        NSLog("Invalid event; no transition occurred")
+        // Do other stuff here
+    })
 
 Transitions are defined as such:
 
