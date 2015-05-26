@@ -97,44 +97,44 @@ public class SignalMachine<
     
     typealias T = Transition<S, E>
     
-    public var state: S
+    public var state: MutableProperty<S>
     private let dictionary: TransitionDictionary<S, E>
-    private let signal: Signal<T, NoError>
+    private let signalProducer: SignalProducer<T, NoError>
     private let sink: SinkOf<Event<T, NoError>>
     
     public init(transitionDictionary: TransitionDictionary<S, E>, withInitialState state: S) {
         dictionary = transitionDictionary
-        self.state = state
-        (signal, sink) = Signal<T, NoError>.pipe()
+        self.state = MutableProperty(state)
+        (signalProducer, sink) = SignalProducer.buffer(0)
     }
     
     public func inputEvent(event: E) {
-        let fromState = state
+        let fromState = state.value
         let toState = dictionary.toStateForEvent(event, fromState: fromState)
         if let toState = toState {
-            state = toState
+            state.value = toState
         }
         let transition = T(fromState: fromState, toState: toState, event: event)
         sendNext(sink, transition)
     }
     
-    public func allTransitions() -> Signal<T, NoError> {
-        return signal
+    public func allTransitions() -> SignalProducer<T, NoError> {
+        return signalProducer
     }
     
-    public func transitionsFrom(state: S) -> Signal<T, NoError> {
-        return signal |> filter { $0.fromState == state }
+    public func transitionsFrom(state: S) -> SignalProducer<T, NoError> {
+        return signalProducer |> filter { $0.fromState == state }
     }
     
-    public func transitionsFrom(fromState: S, toState: T.State) -> Signal<T, NoError> {
-        return signal |> filter { $0.fromState == fromState && $0.toState == toState }
+    public func transitionsFrom(fromState: S, toState: T.State) -> SignalProducer<T, NoError> {
+        return signalProducer |> filter { $0.fromState == fromState && $0.toState == toState }
     }
     
-    public func transitionsTo(toState: S) -> Signal<T, NoError> {
-        return signal |> filter { $0.toState == toState }
+    public func transitionsTo(toState: S) -> SignalProducer<T, NoError> {
+        return signalProducer |> filter { $0.toState == toState }
     }
     
-    public func transitionFaults() -> Signal<T, NoError> {
-        return signal |> filter { $0.toState == nil }
+    public func transitionFaults() -> SignalProducer<T, NoError> {
+        return signalProducer |> filter { $0.toState == nil }
     }
 }

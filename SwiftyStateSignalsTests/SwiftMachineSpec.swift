@@ -79,8 +79,8 @@ class SwiftMachineSepc: QuickSpec {
             describe("allTransitions") {
                 it("should transition when signal is sent after observation") {
                     var counter = 0
-                    let signal = stateMachine.allTransitions()
-                    signal.observe(next: { _ in counter += 1 })
+                    let signalProducer = stateMachine.allTransitions()
+                    signalProducer.start(next: { _ in counter += 1 })
                     
                     expect(counter) == 0
                     
@@ -95,7 +95,7 @@ class SwiftMachineSepc: QuickSpec {
                     
                     expect(counter) == 0
                     
-                    stateMachine.allTransitions().observe(next: { _ in counter += 1 })
+                    stateMachine.allTransitions().start(next: { _ in counter += 1 })
                     
                     expect(counter) == 0
                 }
@@ -104,7 +104,7 @@ class SwiftMachineSepc: QuickSpec {
                     stateMachine.inputEvent(.Start)
                     stateMachine.inputEvent(.Event0)
                     var executed = false
-                    stateMachine.allTransitions().observe(next: { t in
+                    stateMachine.allTransitions().start(next: { t in
                         expect(t.toState).to(beNil())
                         executed = true
                     })
@@ -114,14 +114,14 @@ class SwiftMachineSepc: QuickSpec {
             }
             describe("transitionsFrom") {
                 it("should send transition") {
-                    stateMachine.allTransitions().observe(next: { t in
+                    stateMachine.allTransitions().start(next: { t in
                         NSLog("\(t)")
                     })
                     stateMachine.inputEvent(.Start)
                     stateMachine.inputEvent(.Event0)
                     
                     var executed = false
-                    stateMachine.transitionsFrom(.B).observe(next: { t in
+                    stateMachine.transitionsFrom(.B).start(next: { t in
                         executed = true
                         expect(t.fromState) == TestState.B
                         expect(t.toState) == .C
@@ -134,7 +134,7 @@ class SwiftMachineSepc: QuickSpec {
                 
                 it("should not transition when fromState is not current state") {
                     var executed = false
-                    stateMachine.transitionsFrom(.B).observe(next: { t in
+                    stateMachine.transitionsFrom(.B).start(next: { t in
                         executed = true
                     })
                     stateMachine.inputEvent(.Start)
@@ -146,7 +146,7 @@ class SwiftMachineSepc: QuickSpec {
             describe("transitionFault") {
                 it("should send transition with nil toState") {
                     var executed = false
-                    stateMachine.transitionFaults().observe(next: { t in
+                    stateMachine.transitionFaults().start(next: { t in
                         executed = true
                         expect(t.toState).to(beNil())
                     })
@@ -156,7 +156,7 @@ class SwiftMachineSepc: QuickSpec {
                 
                 it("should not send transitions for successful transitions") {
                     var executed = false
-                    stateMachine.transitionFaults().observe(next: { t in
+                    stateMachine.transitionFaults().start(next: { t in
                         executed = true
                     })
                     stateMachine.inputEvent(.Start)
