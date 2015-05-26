@@ -1,4 +1,9 @@
 machine:
   xcode:
     version: "6.3.1"
+dependencies:
+  pre:
+    # Using carthage 0.6.4 to avoid deadlock
+    - brew install https://github.com/Homebrew/homebrew/raw/cf9ac58c59290ce72da996cd2d36ecbfdc1d75d2/Library/Formula/carthage.rb
+    - carthage bootstrap
 
