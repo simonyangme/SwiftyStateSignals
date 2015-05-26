@@ -97,18 +97,18 @@ public class SignalMachine<
     
     typealias T = Transition<S, E>
     
-    var state: S
+    public var state: S
     private let dictionary: TransitionDictionary<S, E>
     private let signal: Signal<T, NoError>
     private let sink: SinkOf<Event<T, NoError>>
     
-    init(transitionDictionary: TransitionDictionary<S, E>, withInitialState state: S) {
+    public init(transitionDictionary: TransitionDictionary<S, E>, withInitialState state: S) {
         dictionary = transitionDictionary
         self.state = state
         (signal, sink) = Signal<T, NoError>.pipe()
     }
     
-    func inputEvent(event: E) {
+    public func inputEvent(event: E) {
         let fromState = state
         let toState = dictionary.toStateForEvent(event, fromState: fromState)
         if let toState = toState {
@@ -118,23 +118,23 @@ public class SignalMachine<
         sendNext(sink, transition)
     }
     
-    func allTransitions() -> Signal<T, NoError> {
+    public func allTransitions() -> Signal<T, NoError> {
         return signal
     }
     
-    func transitionsFrom(state: S) -> Signal<T, NoError> {
+    public func transitionsFrom(state: S) -> Signal<T, NoError> {
         return signal |> filter { $0.fromState == state }
     }
     
-    func transitionsFrom(fromState: S, toState: T.State) -> Signal<T, NoError> {
+    public func transitionsFrom(fromState: S, toState: T.State) -> Signal<T, NoError> {
         return signal |> filter { $0.fromState == fromState && $0.toState == toState }
     }
     
-    func transitionsTo(toState: S) -> Signal<T, NoError> {
+    public func transitionsTo(toState: S) -> Signal<T, NoError> {
         return signal |> filter { $0.toState == toState }
     }
     
-    func transitionFaults() -> Signal<T, NoError> {
+    public func transitionFaults() -> Signal<T, NoError> {
         return signal |> filter { $0.toState == nil }
     }
 }
