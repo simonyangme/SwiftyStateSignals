@@ -1,0 +1,10 @@
+language: objective-c
+osx_image: beta-xcode6.3
+before_install: true
+install: true
+git:
+  submodules: false
+script: script/cibuild
+notifications:
+  email: true
+
