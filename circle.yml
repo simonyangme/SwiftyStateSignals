@@ -6,5 +6,5 @@ dependencies:
     # Using carthage 0.6.4 to avoid deadlock
     - sudo find /Library/Developer/CoreSimulator/Profiles/Runtimes -name dyld_sim -print0 | xargs -0 sudo chown :wheel
     - brew install https://github.com/Homebrew/homebrew/raw/cf9ac58c59290ce72da996cd2d36ecbfdc1d75d2/Library/Formula/carthage.rb
-    - carthage bootstrap
+    - carthage bootstrap --verbose
 
