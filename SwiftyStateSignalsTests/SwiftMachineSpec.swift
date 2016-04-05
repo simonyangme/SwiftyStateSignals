@@ -12,7 +12,7 @@ import ReactiveCocoa
 
 import SwiftyStateSignals
 
-enum TestEvent: Printable {
+enum TestEvent: CustomStringConvertible {
     case Start, Event0, Event1, Event2, Event3
     var description: String {
         get {
@@ -31,7 +31,7 @@ enum TestEvent: Printable {
         }
     }
 }
-enum TestState: Printable {
+enum TestState: CustomStringConvertible {
     case Initial, A, B, C, D
     var description: String {
         get {
@@ -80,7 +80,7 @@ class SwiftMachineSepc: QuickSpec {
                 it("should transition when signal is sent after observation") {
                     var counter = 0
                     let signal = stateMachine.allTransitions()
-                    signal.observe(next: { _ in counter += 1 })
+                    signal.observe { _ in counter += 1 }
                     
                     expect(counter) == 0
                     
@@ -95,7 +95,7 @@ class SwiftMachineSepc: QuickSpec {
                     
                     expect(counter) == 0
                     
-                    stateMachine.allTransitions().observe(next: { _ in counter += 1 })
+                    stateMachine.allTransitions().observe { _ in counter += 1 }
                     
                     expect(counter) == 0
                 }
@@ -104,28 +104,28 @@ class SwiftMachineSepc: QuickSpec {
                     stateMachine.inputEvent(.Start)
                     stateMachine.inputEvent(.Event0)
                     var executed = false
-                    stateMachine.allTransitions().observe(next: { t in
-                        expect(t.toState).to(beNil())
+                    stateMachine.allTransitions().observe { e in
+                        expect(e.value?.toState).to(beNil())
                         executed = true
-                    })
+                    }
                     stateMachine.inputEvent(.Start)
                     expect(executed).to(beTruthy())
                 }
             }
             describe("transitionsFrom") {
                 it("should send transition") {
-                    stateMachine.allTransitions().observe(next: { t in
-                        NSLog("\(t)")
-                    })
+                    stateMachine.allTransitions().observe { e in
+                        NSLog("\(e)")
+                    }
                     stateMachine.inputEvent(.Start)
                     stateMachine.inputEvent(.Event0)
                     
                     var executed = false
-                    stateMachine.transitionsFrom(.B).observe(next: { t in
+                    stateMachine.transitionsFrom(.B).observe { e in
                         executed = true
-                        expect(t.fromState) == TestState.B
-                        expect(t.toState) == .C
-                    })
+                        expect(e.value?.fromState) == TestState.B
+                        expect(e.value?.toState) == .C
+                    }
                     
                     stateMachine.inputEvent(.Event1)
                     
@@ -134,9 +134,9 @@ class SwiftMachineSepc: QuickSpec {
                 
                 it("should not transition when fromState is not current state") {
                     var executed = false
-                    stateMachine.transitionsFrom(.B).observe(next: { t in
+                    stateMachine.transitionsFrom(.B).observe { _ in
                         executed = true
-                    })
+                    }
                     stateMachine.inputEvent(.Start)
                     stateMachine.inputEvent(.Event0)
                     
@@ -146,19 +146,19 @@ class SwiftMachineSepc: QuickSpec {
             describe("transitionFault") {
                 it("should send transition with nil toState") {
                     var executed = false
-                    stateMachine.transitionFaults().observe(next: { t in
+                    stateMachine.transitionFaults().observe { e in
                         executed = true
-                        expect(t.toState).to(beNil())
-                    })
+                        expect(e.value?.toState).to(beNil())
+                    }
                     stateMachine.inputEvent(.Event0)
                     expect(executed).to(beTruthy())
                 }
                 
                 it("should not send transitions for successful transitions") {
                     var executed = false
-                    stateMachine.transitionFaults().observe(next: { t in
+                    stateMachine.transitionFaults().observe { _ in
                         executed = true
-                    })
+                    }
                     stateMachine.inputEvent(.Start)
                     expect(executed).toNotEventually(beTruthy())
                 }

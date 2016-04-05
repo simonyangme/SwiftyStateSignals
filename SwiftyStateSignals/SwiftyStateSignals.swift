@@ -7,25 +7,26 @@
 //
 
 import ReactiveCocoa
+import Result
 
 public protocol TransitionDictionaryType {
-    typealias State
-    typealias Event
+    associatedtype State
+    associatedtype Event
     
     func mapEvent(event: Event, fromState: State, toState: State)
     func toStateForEvent(event: Event, fromState: State) -> State?
 }
 
 public class TransitionDictionary<S, E where S: Hashable, E: Hashable>: TransitionDictionaryType {
-    typealias State = S
-    typealias Event = E
+    public typealias State = S
+    public typealias Event = E
     
     private var eventDictionary = Dictionary<Event, Dictionary<State, State>>()
     
     public func mapEvent(event: Event, fromState: State, toState: State) {
         if let transitions = eventDictionary[event] {
             if let currentToState = transitions[fromState] {
-                println("Warning: mapEvent:\(event) from:\(fromState) to:\(toState) overwriting existing transition to '\(currentToState)'")
+                print("Warning: mapEvent:\(event) from:\(fromState) to:\(toState) overwriting existing transition to '\(currentToState)'")
             }
             var newTransitions = transitions
             newTransitions[fromState] = toState
@@ -60,8 +61,8 @@ public class TransitionDictionary<S, E where S: Hashable, E: Hashable>: Transiti
 }
 
 public protocol TransitionType {
-    typealias State
-    typealias Event
+    associatedtype State
+    associatedtype Event
     
     var fromState: State { get }
     var toState: State? { get }
@@ -70,9 +71,9 @@ public protocol TransitionType {
     init(fromState: State, toState: State?, event: Event)
 }
 
-public struct Transition<A, B>: TransitionType, Printable {
-    typealias State = A
-    typealias Event = B
+public struct Transition<A, B>: TransitionType, CustomStringConvertible {
+    public typealias State = A
+    public typealias Event = B
     
     public let fromState: State
     public let toState: State?
@@ -95,12 +96,12 @@ public class SignalMachine<
     S, E
     where S: Equatable, S: Hashable, E: Equatable, E: Hashable> {
     
-    typealias T = Transition<S, E>
+    public typealias T = Transition<S, E>
     
     public var state: S
     private let dictionary: TransitionDictionary<S, E>
-    private let signal: Signal<T, NoError>
-    private let sink: SinkOf<Event<T, NoError>>
+    public let signal: Signal<T, NoError>
+    private let sink: Observer<T, NoError>
     
     public init(transitionDictionary: TransitionDictionary<S, E>, withInitialState state: S) {
         dictionary = transitionDictionary
@@ -115,7 +116,7 @@ public class SignalMachine<
             state = toState
         }
         let transition = T(fromState: fromState, toState: toState, event: event)
-        sendNext(sink, transition)
+        sink.sendNext(transition)
     }
     
     public func allTransitions() -> Signal<T, NoError> {
@@ -123,18 +124,18 @@ public class SignalMachine<
     }
     
     public func transitionsFrom(state: S) -> Signal<T, NoError> {
-        return signal |> filter { $0.fromState == state }
+        return signal.filter { $0.fromState == state }
     }
     
     public func transitionsFrom(fromState: S, toState: T.State) -> Signal<T, NoError> {
-        return signal |> filter { $0.fromState == fromState && $0.toState == toState }
+        return signal.filter { $0.fromState == fromState && $0.toState == toState }
     }
     
     public func transitionsTo(toState: S) -> Signal<T, NoError> {
-        return signal |> filter { $0.toState == toState }
+        return signal.filter { $0.toState == toState }
     }
     
     public func transitionFaults() -> Signal<T, NoError> {
-        return signal |> filter { $0.toState == nil }
+        return signal.filter { $0.toState == nil }
     }
 }
