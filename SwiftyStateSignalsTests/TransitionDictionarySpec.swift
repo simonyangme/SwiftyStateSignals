@@ -19,11 +19,11 @@ class TransitionDictionarySpec: QuickSpec {
             
             beforeEach {
                 transitionDictionary = TransitionDictionary()
-                transitionDictionary.mapEvent(.Event0, fromState: .A, toState: .B)
-                transitionDictionary.mapEvent(.Event1, fromState: .B, toState: .C)
-                transitionDictionary.mapEvent(.Event2, fromState: .C, toState: .D)
-                transitionDictionary.mapEvent(.Event3, fromState: .D, toState: .A)
-                transitionDictionary.mapEvent(.Event3, fromState: .B, toState: .D)
+                transitionDictionary.mapEvent(.event0, fromState: .a, toState: .b)
+                transitionDictionary.mapEvent(.event1, fromState: .b, toState: .c)
+                transitionDictionary.mapEvent(.event2, fromState: .c, toState: .d)
+                transitionDictionary.mapEvent(.event3, fromState: .d, toState: .a)
+                transitionDictionary.mapEvent(.event3, fromState: .b, toState: .d)
             }
             
             afterEach {
@@ -31,37 +31,37 @@ class TransitionDictionarySpec: QuickSpec {
             }
             
             it("should return nil for event with no transition") {
-                expect(transitionDictionary.toStateForEvent(.Event0, fromState: .B)).to(beNil())
-                expect(transitionDictionary.toStateForEvent(.Event0, fromState: .D)).to(beNil())
+                expect(transitionDictionary.toStateForEvent(.event0, fromState: .b)).to(beNil())
+                expect(transitionDictionary.toStateForEvent(.event0, fromState: .d)).to(beNil())
             }
             
             it("should return new state for valid event transition") {
-                expect(transitionDictionary.toStateForEvent(.Event0, fromState: .A)) == .B
-                expect(transitionDictionary.toStateForEvent(.Event1, fromState: .B)) == .C
-                expect(transitionDictionary.toStateForEvent(.Event2, fromState: .C)) == .D
+                expect(transitionDictionary.toStateForEvent(.event0, fromState: .a)) == .b
+                expect(transitionDictionary.toStateForEvent(.event1, fromState: .b)) == .c
+                expect(transitionDictionary.toStateForEvent(.event2, fromState: .c)) == .d
             }
             
             it("should return correct state for event mapped to multiple transitions") {
-                expect(transitionDictionary.toStateForEvent(.Event3, fromState: .B)) == .D
-                expect(transitionDictionary.toStateForEvent(.Event3, fromState: .D)) == .A
+                expect(transitionDictionary.toStateForEvent(.event3, fromState: .b)) == .d
+                expect(transitionDictionary.toStateForEvent(.event3, fromState: .d)) == .a
             }
             
             it("should create new independent copies of transition dictionaries") {
                 let dictionaryCopy = TransitionDictionary(fromTransitionDictionary:transitionDictionary)
-                transitionDictionary.mapEvent(.Event3, fromState: .A, toState: .B)
-                dictionaryCopy.mapEvent(.Event3, fromState: .A, toState: .C)
+                transitionDictionary.mapEvent(.event3, fromState: .a, toState: .b)
+                dictionaryCopy.mapEvent(.event3, fromState: .a, toState: .c)
                 
-                expect(transitionDictionary.toStateForEvent(.Event0, fromState: .A)) == .B
-                expect(dictionaryCopy.toStateForEvent(.Event0, fromState: .A)) == .B
+                expect(transitionDictionary.toStateForEvent(.event0, fromState: .a)) == .b
+                expect(dictionaryCopy.toStateForEvent(.event0, fromState: .a)) == .b
                 
-                expect(transitionDictionary.toStateForEvent(.Event3, fromState: .A)) == .B
-                expect(dictionaryCopy.toStateForEvent(.Event3, fromState: .A)) == .C
+                expect(transitionDictionary.toStateForEvent(.event3, fromState: .a)) == .b
+                expect(dictionaryCopy.toStateForEvent(.event3, fromState: .a)) == .c
             }
             
             it("should overwrite existing transition") {
-                expect(transitionDictionary.toStateForEvent(.Event2, fromState: .C)) == .D
-                transitionDictionary.mapEvent(.Event2, fromState: .C, toState: .A)
-                expect(transitionDictionary.toStateForEvent(.Event2, fromState: .C)) == .A
+                expect(transitionDictionary.toStateForEvent(.event2, fromState: .c)) == .d
+                transitionDictionary.mapEvent(.event2, fromState: .c, toState: .a)
+                expect(transitionDictionary.toStateForEvent(.event2, fromState: .c)) == .a
             }
         }
     }

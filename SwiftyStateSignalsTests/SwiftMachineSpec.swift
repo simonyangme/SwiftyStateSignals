@@ -13,38 +13,38 @@ import ReactiveCocoa
 import SwiftyStateSignals
 
 enum TestEvent: CustomStringConvertible {
-    case Start, Event0, Event1, Event2, Event3
+    case start, event0, event1, event2, event3
     var description: String {
         get {
             switch self {
-            case .Start:
+            case .start:
                 return "Start"
-            case .Event0:
+            case .event0:
                 return "Event0"
-            case .Event1:
+            case .event1:
                 return "Event1"
-            case .Event2:
+            case .event2:
                 return "Event2"
-            case .Event3:
+            case .event3:
                 return "Event3"
             }
         }
     }
 }
 enum TestState: CustomStringConvertible {
-    case Initial, A, B, C, D
+    case initial, a, b, c, d
     var description: String {
         get {
             switch self {
-            case .Initial:
+            case .initial:
                 return "Initial"
-            case .A:
+            case .a:
                 return "A"
-            case .B:
+            case .b:
                 return "B"
-            case .C:
+            case .c:
                 return "C"
-            case .D:
+            case .d:
                 return "D"
             }
         }
@@ -61,14 +61,14 @@ class SwiftMachineSepc: QuickSpec {
     
             beforeEach {
                 transitionDictionary = TransitionDictionary()
-                transitionDictionary.mapEvent(.Start, fromState: .Initial, toState: .A)
-                transitionDictionary.mapEvent(.Event0, fromState: .A, toState: .B)
-                transitionDictionary.mapEvent(.Event1, fromState: .B, toState: .C)
-                transitionDictionary.mapEvent(.Event2, fromState: .C, toState: .D)
-                transitionDictionary.mapEvent(.Event3, fromState: .D, toState: .A)
-                transitionDictionary.mapEvent(.Event3, fromState: .B, toState: .D)
+                transitionDictionary.mapEvent(.start, fromState: .initial, toState: .a)
+                transitionDictionary.mapEvent(.event0, fromState: .a, toState: .b)
+                transitionDictionary.mapEvent(.event1, fromState: .b, toState: .c)
+                transitionDictionary.mapEvent(.event2, fromState: .c, toState: .d)
+                transitionDictionary.mapEvent(.event3, fromState: .d, toState: .a)
+                transitionDictionary.mapEvent(.event3, fromState: .b, toState: .d)
                 
-                stateMachine = SignalMachine(transitionDictionary: transitionDictionary, withInitialState: .Initial)
+                stateMachine = SignalMachine(transitionDictionary: transitionDictionary, withInitialState: .initial)
             }
             
             afterEach {
@@ -84,14 +84,14 @@ class SwiftMachineSepc: QuickSpec {
                     
                     expect(counter) == 0
                     
-                    stateMachine.inputEvent(.Event1)
+                    stateMachine.inputEvent(.event1)
                     
                     expect(counter) == 1
                 }
                 
                 it("should not transistion before observation") {
                     var counter = 0
-                    stateMachine.inputEvent(.Event0)
+                    stateMachine.inputEvent(.event0)
                     
                     expect(counter) == 0
                     
@@ -101,14 +101,14 @@ class SwiftMachineSepc: QuickSpec {
                 }
                 
                 it("should send nil state when there is no transition for event") {
-                    stateMachine.inputEvent(.Start)
-                    stateMachine.inputEvent(.Event0)
+                    stateMachine.inputEvent(.start)
+                    stateMachine.inputEvent(.event0)
                     var executed = false
                     stateMachine.allTransitions().observe { e in
                         expect(e.value?.toState).to(beNil())
                         executed = true
                     }
-                    stateMachine.inputEvent(.Start)
+                    stateMachine.inputEvent(.start)
                     expect(executed).to(beTruthy())
                 }
             }
@@ -117,28 +117,28 @@ class SwiftMachineSepc: QuickSpec {
                     stateMachine.allTransitions().observe { e in
                         NSLog("\(e)")
                     }
-                    stateMachine.inputEvent(.Start)
-                    stateMachine.inputEvent(.Event0)
+                    stateMachine.inputEvent(.start)
+                    stateMachine.inputEvent(.event0)
                     
                     var executed = false
-                    stateMachine.transitionsFrom(.B).observe { e in
+                    stateMachine.transitionsFrom(.b).observe { e in
                         executed = true
-                        expect(e.value?.fromState) == TestState.B
-                        expect(e.value?.toState) == .C
+                        expect(e.value?.fromState) == TestState.b
+                        expect(e.value?.toState) == .c
                     }
                     
-                    stateMachine.inputEvent(.Event1)
+                    stateMachine.inputEvent(.event1)
                     
                     expect(executed).to(beTruthy())
                 }
                 
                 it("should not transition when fromState is not current state") {
                     var executed = false
-                    stateMachine.transitionsFrom(.B).observe { _ in
+                    stateMachine.transitionsFrom(.b).observe { _ in
                         executed = true
                     }
-                    stateMachine.inputEvent(.Start)
-                    stateMachine.inputEvent(.Event0)
+                    stateMachine.inputEvent(.start)
+                    stateMachine.inputEvent(.event0)
                     
                     expect(executed).toNotEventually(beTruthy())
                 }
@@ -150,7 +150,7 @@ class SwiftMachineSepc: QuickSpec {
                         executed = true
                         expect(e.value?.toState).to(beNil())
                     }
-                    stateMachine.inputEvent(.Event0)
+                    stateMachine.inputEvent(.event0)
                     expect(executed).to(beTruthy())
                 }
                 
@@ -159,7 +159,7 @@ class SwiftMachineSepc: QuickSpec {
                     stateMachine.transitionFaults().observe { _ in
                         executed = true
                     }
-                    stateMachine.inputEvent(.Start)
+                    stateMachine.inputEvent(.start)
                     expect(executed).toNotEventually(beTruthy())
                 }
             }
